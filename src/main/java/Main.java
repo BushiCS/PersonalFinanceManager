@@ -25,7 +25,6 @@ public class Main {
                     categories.setCategoryFromTSV(info.getTitle(), productsAndCategories);
                     categories.setSum(info.getSum());
                     categories.setCategories();
-                    categories.calcMaxCategory(categories.getCategories());
                     out.println(categories.calcMaxCategory(categories.getCategories()));
                 }
             }
