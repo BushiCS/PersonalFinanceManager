@@ -11,7 +11,7 @@ public class Client {
 
     public static void main(String[] args) {
         ObjectMapper mapper = new ObjectMapper();
-        PurchaseInfo purchaseInfo = new PurchaseInfo("шаaпка", "2022.02.08", 330);
+        PurchaseInfo purchaseInfo = new PurchaseInfo("шапка", "2022.02.08", 130);
         try (Socket clientSocket = new Socket(HOST, PORT);
              PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
