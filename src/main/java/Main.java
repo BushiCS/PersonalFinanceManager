@@ -25,9 +25,8 @@ public class Main {
                     categories.setCategoryFromTSV(info.getTitle(), productsAndCategories);
                     categories.setSum(info.getSum());
                     categories.setCategories();
-                    categories.calcMaxCategory();
-                    String s = mapper.writeValueAsString(categories);
-                    out.println("{\"maxCategory\":" + s + "}");
+                    categories.calcMaxCategory(categories.getCategories());
+                    out.println(categories.calcMaxCategory(categories.getCategories()));
                 }
             }
         } catch (

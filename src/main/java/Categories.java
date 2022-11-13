@@ -1,6 +1,8 @@
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Categories {
     private String category;
@@ -52,14 +54,19 @@ public class Categories {
         }
     }
 
-    public void calcMaxCategory() {
-        int sumMax = categories.values().stream().max(Integer::compare).get();
+    public String calcMaxCategory(Map<String, Integer> categories) {
+        int sumMax = 0;
+        Optional<Integer> max = categories.values().stream().max(Integer::compare);
+        if (max.isPresent()) {
+            sumMax = max.get();
+        }
         for (Map.Entry<String, Integer> entry : categories.entrySet()) {
             if (entry.getValue().equals(sumMax)) {
                 sum = sumMax;
                 category = entry.getKey();
             }
         }
+        return "{\"maxCategory\":" + "{\"category\":" + "\"" + category + "\"," + "\"sum\":" + sum + "}}";
     }
 
     public void setSum(int sum) {
