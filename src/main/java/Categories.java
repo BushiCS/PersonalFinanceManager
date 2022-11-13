@@ -1,4 +1,10 @@
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +14,8 @@ public class Categories {
     private String category;
     private int sum;
     private Map<String, Integer> categories = new HashMap<>();
+
+    ObjectMapper mapper = new ObjectMapper();
 
     public Categories() {
     }
@@ -54,7 +62,31 @@ public class Categories {
         }
     }
 
+    @JsonTypeName ("maxCategory")
+    @JsonTypeInfo(include = As.WRAPPER_OBJECT, use = Id.NAME)
+    static class MaxCategory {
+        String category;
+        int sum;
+
+        public int getSum() {
+            return sum;
+        }
+
+        public void setSum(int sum) {
+            this.sum = sum;
+        }
+
+        public String getCategory() {
+            return category;
+        }
+
+        public void setCategory(String category) {
+            this.category = category;
+        }
+    }
+
     public String calcMaxCategory(Map<String, Integer> categories) {
+        MaxCategory maxCategory = new MaxCategory();
         int sumMax = 0;
         Optional<Integer> max = categories.values().stream().max(Integer::compare);
         if (max.isPresent()) {
@@ -62,11 +94,16 @@ public class Categories {
         }
         for (Map.Entry<String, Integer> entry : categories.entrySet()) {
             if (entry.getValue().equals(sumMax)) {
-                sum = sumMax;
-                category = entry.getKey();
+                maxCategory.setSum(sumMax);
+                maxCategory.setCategory(entry.getKey());
             }
         }
-        return "{\"maxCategory\":" + "{\"category\":" + "\"" + category + "\"," + "\"sum\":" + sum + "}}";
+        try {
+            return mapper.writeValueAsString(maxCategory);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        // return "{\"maxCategory\":" + "{\"category\":" + "\"" + category + "\"," + "\"sum\":" + sum + "}}";
     }
 
     public void setSum(int sum) {
